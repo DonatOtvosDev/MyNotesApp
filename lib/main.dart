@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:my_notes/providers/auth.dart';
+import 'package:my_notes/providers/notes.dart';
 
 import 'package:my_notes/screens/home.dart';
+import 'package:my_notes/screens/authScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (ctx) => UserAuth()),
+      ChangeNotifierProxyProvider<UserAuth, Notes>(create: (ctx) => Notes(), update: (ctx, userAuth, previousNotes) => Notes(),)
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   //https://colorhunt.co/palette/0b244719376d576cbca5d7e8
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,8 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         textTheme: const TextTheme(
-            bodyMedium: TextStyle(color: Color.fromRGBO(241, 246, 249, 1), fontSize: 16)),
+            bodyMedium: TextStyle(
+                color: Color.fromRGBO(241, 246, 249, 1), fontSize: 16)),
         appBarTheme: const AppBarTheme(
             backgroundColor: Color.fromRGBO(87, 108, 188, 1),
             titleTextStyle: TextStyle(
@@ -41,7 +52,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const AuthScreen(),
     );
   }
 }
