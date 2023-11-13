@@ -11,7 +11,10 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (ctx) => UserAuth()),
-      ChangeNotifierProxyProvider<UserAuth, Notes>(create: (ctx) => Notes(), update: (ctx, userAuth, previousNotes) => Notes(),)
+      ChangeNotifierProxyProvider<UserAuth, Notes>(
+        create: (ctx) => Notes(),
+        update: (ctx, userAuth, previousNotes) => Notes(),
+      )
     ],
     child: const MyApp(),
   ));
@@ -52,7 +55,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
         useMaterial3: true,
       ),
-      home: const AuthScreen(),
+      home: Provider.of<UserAuth>(context).isAuthenticated
+          ? const HomeScreen()
+          : const AuthScreen(),
+      routes: {
+        AuthScreen.routeName: (context) => const AuthScreen(),
+      },
     );
   }
 }

@@ -59,10 +59,50 @@ class _AuthFormState extends State<AuthForm> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    
+    setState(() {
+      _isLoading = true;
+    });
     _formKey.currentState!.save();
-    await Provider.of<UserAuth>(context, listen: false).loginUser(authData);
-   
+
+    try {
+      if (_isLogIn) {
+        await Provider.of<UserAuth>(context, listen: false).loginUser(authData);
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        await Provider.of<UserAuth>(context, listen: false).register(authData);
+      }
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                title: Text(
+                  "Error",
+                  style: textStyle.copyWith(fontWeight: FontWeight.bold),
+                ),
+                content: Text(
+                  error.toString(),
+                  style: textStyle,
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text(
+                        'Ok',
+                        style: textStyle,
+                      ))
+                ],
+              ));
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -122,13 +162,15 @@ class _AuthFormState extends State<AuthForm> {
                                   .copyWith(topLeft: const Radius.circular(10)),
                               color: Colors.white),
                           child: TextFormField(
+                              obscureText: true,
                               style: const TextStyle(fontSize: 18),
                               validator: (value) {
                                 if (value == "") {
                                   return "Field is required";
                                 } else if (value!.length < 6) {
-                                  return "Password must be at least 4 characters";
+                                  return "Password must be at least 6 characters";
                                 }
+                                passw = value;
                                 return null;
                               },
                               onSaved: (newValue) {
@@ -150,6 +192,7 @@ class _AuthFormState extends State<AuthForm> {
                                         topLeft: const Radius.circular(10)),
                                 color: Colors.white),
                             child: TextFormField(
+                              obscureText: true,
                               style: const TextStyle(fontSize: 18),
                               validator: (value) {
                                 if (value == "") {
