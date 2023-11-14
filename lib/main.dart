@@ -12,8 +12,8 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (ctx) => UserAuth()),
       ChangeNotifierProxyProvider<UserAuth, Notes>(
-        create: (ctx) => Notes(),
-        update: (ctx, userAuth, previousNotes) => Notes(),
+        create: (ctx) => Notes(null),
+        update: (ctx, userAuth, previousNotes) => Notes(userAuth.token),
       )
     ],
     child: const MyApp(),

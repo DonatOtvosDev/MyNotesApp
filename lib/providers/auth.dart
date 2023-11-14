@@ -46,16 +46,7 @@ class UserAuth extends ChangeNotifier {
     }
 
     _token = responseData["access_token"];
-    final dtToConvert = DateTime.parse(responseData["expiary"]);
-    //convering the locally phased datetime to utc
-    _expiary = DateTime.utc(
-        dtToConvert.year,
-        dtToConvert.month,
-        dtToConvert.day,
-        dtToConvert.hour,
-        dtToConvert.minute,
-        dtToConvert.second,
-        dtToConvert.microsecond);
+    _expiary = _pharseTimeToUtc(responseData["expiary"]);
     _userName = data["username"];
     notifyListeners();
   }
@@ -80,5 +71,19 @@ class UserAuth extends ChangeNotifier {
     final timeToNewLogin = _expiary!.difference(
         DateTime.now().toUtc().subtract(const Duration(seconds: 30)));
     _authTimer = Timer(timeToNewLogin, () => loginUser(data));
+  }
+
+  DateTime _pharseTimeToUtc(String timeAsString) {
+    final dtToConvert = DateTime.parse(timeAsString);
+    //convering the locally phased datetime to utc
+    DateTime utcTime = DateTime.utc(
+        dtToConvert.year,
+        dtToConvert.month,
+        dtToConvert.day,
+        dtToConvert.hour,
+        dtToConvert.minute,
+        dtToConvert.second,
+        dtToConvert.microsecond);
+    return utcTime;
   }
 }
