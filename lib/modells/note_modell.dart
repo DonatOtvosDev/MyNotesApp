@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 class NoteData {
-  Int id;
+  int id;
   String title;
   String content;
   DateTime lastModified;

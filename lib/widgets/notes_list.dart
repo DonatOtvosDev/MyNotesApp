@@ -22,9 +22,7 @@ class _NotesListState extends State<NotesList> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Notes>(context, listen: false)
-          .loadNotes()
-          .then((_) {
+      Provider.of<Notes>(context, listen: false).loadNotes().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -38,13 +36,18 @@ class _NotesListState extends State<NotesList> {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: _isLoading ? const Center(child: CircularProgressIndicator(),) : Container(
-        padding: const EdgeInsets.all(16),
-        width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-              itemCount: 50, itemBuilder: (ctx, i) => NoteItem()),
-        
-      ),
+      child: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              padding: const EdgeInsets.all(16),
+              width: MediaQuery.of(context).size.width,
+              child: Consumer<Notes>(
+                  builder: (ctx, notes, _) => ListView.builder(
+                      itemCount: notes.notes.length,
+                      itemBuilder: (ctx, i) => NoteItem(notes.notes[i]))),
+            ),
     );
   }
 }
