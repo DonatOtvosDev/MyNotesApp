@@ -41,7 +41,7 @@ class _NotesListState extends State<NotesList> {
               child: CircularProgressIndicator(),
             )
           : Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
               width: MediaQuery.of(context).size.width,
               child: Consumer<Notes>(
                   builder: (ctx, notes, _) => ListView.builder(

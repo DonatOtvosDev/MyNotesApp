@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:my_notes/widgets/search_field.dart';
 import 'package:my_notes/widgets/notes_list.dart';
-
-
-import 'package:provider/provider.dart';
-import 'package:my_notes/providers/notes.dart';
-
+import 'package:my_notes/widgets/bottom_bar.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -14,10 +10,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Home")),
-      body: const Column(children: [
-        NoteSearchField(),
-        NotesList()
-      ]),
+      body: const Column(children: [NoteSearchField(), NotesList(), BottomBar()]),
     );
   }
 }

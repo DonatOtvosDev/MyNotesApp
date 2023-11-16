@@ -62,6 +62,7 @@ class UserAuth extends ChangeNotifier {
     }
 
     loginUser(data);
+    _autoRefreshToken(data);
   }
 
   void _autoRefreshToken(Map<String, String> data) {

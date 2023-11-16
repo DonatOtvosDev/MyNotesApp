@@ -20,7 +20,15 @@ class Notes extends ChangeNotifier {
   }
 
   List<NoteData> get notes {
-    return _notes;
+    List<NoteData> notesToReturn = [];
+    if (_filter == null || _filter == "") return _notes;
+    RegExp filterRegex = RegExp((_filter! + r".*"));
+    for (NoteData note in _notes) {
+      if (filterRegex.firstMatch(note.title) != null && _filter!.characters.first == note.title.characters.first) {
+        notesToReturn.add(note);
+      }
+    }
+    return notesToReturn;
   }
 
   Future<void> loadNotes() async {

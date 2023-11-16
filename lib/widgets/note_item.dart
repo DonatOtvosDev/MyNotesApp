@@ -10,6 +10,7 @@ class NoteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).colorScheme.primary;
     return Container(
+      margin:const EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       child: Card(
         color: Colors.white,
@@ -46,10 +47,11 @@ String _convertDateToText(DateTime date) {
   } else if (const Duration(minutes: 60) > dtNow.difference(date)) {
     final minutes = dtNow.difference(date).inMinutes.toStringAsFixed(0);
     return "$minutes minutes ago";
-  } else if (const Duration(hours: 24) > dtNow.difference(date)) {
+  } else if (const Duration(hours: 24) > dtNow.difference(date) && dtNow.day == date.day) {
+    print((date.day, dtNow.day));
     final hours = dtNow.difference(date).inHours.toStringAsFixed(0);
     return "$hours hours ago";
-  } else if (const Duration(days: 2) > dtNow.difference(date)) {
+  } else if (const Duration(hours: 24) > dtNow.difference(date)) {
     return "Yesterday";
   } else if (const Duration(days: 7) > dtNow.difference(date)) {
     return DateFormat.EEEE().format(date);
