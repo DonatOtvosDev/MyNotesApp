@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:my_notes/providers/auth.dart';
 import 'package:my_notes/providers/notes.dart';
 
-import 'package:my_notes/screens/home.dart';
+import 'package:my_notes/screens/homeScreen.dart';
 import 'package:my_notes/screens/authScreen.dart';
+import 'package:my_notes/screens/noteScreen.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -55,9 +56,10 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
         useMaterial3: true,
       ),
-      home: Provider.of<UserAuth>(context).isAuthenticated
-          ? const HomeScreen()
-          : const AuthScreen(),
+      home: NoteScreen(),
+      ///home: Provider.of<UserAuth>(context).isAuthenticated
+      ///    ? const HomeScreen()
+      ///   : const AuthScreen(),
       routes: {
         AuthScreen.routeName: (context) => const AuthScreen(),
       },
