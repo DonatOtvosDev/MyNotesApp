@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:my_notes/providers/individual_note.dart';
+
 class NoteContentEditor extends StatelessWidget {
-  final Function changeContent;
-  const NoteContentEditor(this.changeContent, {super.key});
+  const NoteContentEditor({super.key});
 
 
   @override
@@ -13,10 +15,11 @@ class NoteContentEditor extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: TextField(
         style: const TextStyle(color: Colors.white, fontSize: 18),
-        onChanged: (value) {changeContent(value);},
+        onChanged: (value) {},
         cursorColor: Colors.white,
         expands: true,
         maxLines: null,
+        textAlign: Provider.of<IndividualNote>(context).noteAlignement,
         decoration: const InputDecoration(border: InputBorder.none),
       ),
     );

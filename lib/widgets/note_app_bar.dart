@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_notes/widgets/drop_down_button.dart';
 
+import 'package:provider/provider.dart';
+import 'package:my_notes/providers/individual_note.dart';
+
 class NoteAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
-  final Function updateTitle;
 
-  const NoteAppBar(this.updateTitle, this.appBar, {super.key});
+  const NoteAppBar(this.appBar, {super.key});
 
   @override
   Size get preferredSize => appBar.preferredSize;
@@ -20,7 +22,7 @@ class NoteAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: TextField(
         style: Theme.of(context).appBarTheme.titleTextStyle,
         onChanged: (value) {
-          updateTitle(value);
+          Provider.of<IndividualNote>(context, listen: false).updateTitle(value);
         },
         cursorColor: Colors.white,
         decoration: const InputDecoration(
@@ -31,7 +33,7 @@ class NoteAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             contentPadding: EdgeInsets.all(3)),
       ),
-      actions: [
+      actions: const [
         AllignementSelector()
       ],
     );

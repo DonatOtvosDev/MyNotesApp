@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:my_notes/providers/auth.dart';
 import 'package:my_notes/providers/notes.dart';
+import 'package:my_notes/providers/individual_note.dart';
 
 import 'package:my_notes/screens/homeScreen.dart';
 import 'package:my_notes/screens/authScreen.dart';
@@ -15,7 +16,11 @@ void main() {
       ChangeNotifierProxyProvider<UserAuth, Notes>(
         create: (ctx) => Notes(null),
         update: (ctx, userAuth, previousNotes) => Notes(userAuth.token),
-      )
+      ),
+      ChangeNotifierProxyProvider<UserAuth, IndividualNote>(
+          create: (ctx) => IndividualNote(null),
+          update: (ctx, userAuth, previousIndividualNotes) =>
+              IndividualNote(userAuth.token))
     ],
     child: const MyApp(),
   ));
@@ -56,12 +61,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
         useMaterial3: true,
       ),
-      home: NoteScreen(),
-      ///home: Provider.of<UserAuth>(context).isAuthenticated
-      ///    ? const HomeScreen()
-      ///   : const AuthScreen(),
+      home: Provider.of<UserAuth>(context).isAuthenticated
+          ? const HomeScreen()
+          : const AuthScreen(),
       routes: {
         AuthScreen.routeName: (context) => const AuthScreen(),
+        NoteScreen.routeName: (context) => const NoteScreen()
       },
     );
   }

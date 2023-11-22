@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:my_notes/providers/individual_note.dart';
+
 class AllignementSelector extends StatefulWidget {
   const AllignementSelector({super.key});
 
@@ -8,9 +11,9 @@ class AllignementSelector extends StatefulWidget {
 }
 
 class _AllignementSelectorState extends State<AllignementSelector> {
-  final List<String> alignments = const ["right", "center", "left", "justify"];
+  final List<String> alignments = const ["left", "center", "right", "justify"];
 
-  String currentValue = "right";
+  String currentValue = "left";
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,8 @@ class _AllignementSelectorState extends State<AllignementSelector> {
           if (value != null) {
             setState(() {
               currentValue = value;
+              Provider.of<IndividualNote>(context, listen: false)
+                  .changeTextAlign(value);
             });
           }
         },

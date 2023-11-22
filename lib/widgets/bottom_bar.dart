@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+import "package:my_notes/screens/noteScreen.dart";
+
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
 
@@ -21,7 +23,11 @@ class BottomBar extends StatelessWidget {
                 size: 25,
               )),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, NoteScreen.routeName, arguments: {
+                  "mode" : "add"
+                });
+              },
               icon: Icon(Icons.add_circle_outlined,color: primaryColor, size: 40)),
           IconButton(
               onPressed: () {},

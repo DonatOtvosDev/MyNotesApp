@@ -8,6 +8,7 @@ const String rootLink = "http://mynotes.wombat-tech.tk";
 
 class Notes extends ChangeNotifier {
   String? _filter;
+  
 
   List<NoteData> _notes = [];
 
@@ -19,12 +20,15 @@ class Notes extends ChangeNotifier {
     return _filter;
   }
 
+  
+
   List<NoteData> get notes {
     List<NoteData> notesToReturn = [];
     if (_filter == null || _filter == "") return _notes;
     RegExp filterRegex = RegExp((_filter! + r".*"));
     for (NoteData note in _notes) {
-      if (filterRegex.firstMatch(note.title) != null && _filter!.characters.first == note.title.characters.first) {
+      if (filterRegex.firstMatch(note.title) != null &&
+          _filter!.characters.first == note.title.characters.first) {
         notesToReturn.add(note);
       }
     }
