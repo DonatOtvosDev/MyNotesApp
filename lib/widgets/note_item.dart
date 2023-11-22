@@ -48,7 +48,6 @@ String _convertDateToText(DateTime date) {
     final minutes = dtNow.difference(date).inMinutes.toStringAsFixed(0);
     return "$minutes minutes ago";
   } else if (const Duration(hours: 24) > dtNow.difference(date) && dtNow.day == date.day) {
-    print((date.day, dtNow.day));
     final hours = dtNow.difference(date).inHours.toStringAsFixed(0);
     return "$hours hours ago";
   } else if (const Duration(hours: 24) > dtNow.difference(date)) {
