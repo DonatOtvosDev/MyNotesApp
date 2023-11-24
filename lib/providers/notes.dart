@@ -20,7 +20,9 @@ class Notes extends ChangeNotifier {
     return _filter;
   }
 
-  
+  List<String> get titles {
+    return _notes.map((note) => note.title).toList();
+  }
 
   List<NoteData> get notes {
     List<NoteData> notesToReturn = [];

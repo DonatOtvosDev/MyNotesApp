@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 const String rootLink = "http://mynotes.wombat-tech.tk";
 
 class IndividualNote extends ChangeNotifier {
-  //int? _id;
+  int? _id;
   String? _title;
   String? _content;
   //DateTime? _lastModified;
+  String? _error;
+
+  List<String> _titleList = [];
 
   String? authToken;
 
@@ -28,14 +31,41 @@ class IndividualNote extends ChangeNotifier {
     return _content;
   }
 
-  void updateTitle(String title) {
+  String? get error {
+    return _error;
+  }
+
+  bool updateTitle(String? title) {
+    if (title == null || title == "") {
+      _error = "Title cannot be empty";
+      return false;
+    }
+    else if (_titleList.contains(title.trim())) {
+      _error = "Note already exists with this title";
+      return false;
+    } else if (title.contains(RegExp("[^a-zA-z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ ]"))) {
+      _error = "Invalid character is used";
+      return false;
+    }
     _title = title;
-    notifyListeners();
+    return true;
   }
 
   void updateContent(String content) {
     _content = content;
-    notifyListeners();
+  }
+
+  void openNewNote(List<String> titles) {
+    _id = null;
+    _title = null;
+    _content = null;
+    //_lastModified = null;
+    _titleList = titles;
+    _noteAlignement = TextAlign.left;
+  }
+
+  Future<void> saveNote() async {
+    if (_id == null) {}
   }
 
   void changeTextAlign(String alignement) {

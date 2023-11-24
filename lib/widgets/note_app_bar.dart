@@ -16,13 +16,18 @@ class NoteAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: const Icon(Icons.arrow_back, color: Colors.white)),
       titleSpacing: 0,
-      title: TextField(
+      title: TextFormField(
         style: Theme.of(context).appBarTheme.titleTextStyle,
-        onChanged: (value) {
-          Provider.of<IndividualNote>(context, listen: false).updateTitle(value);
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (Provider.of<IndividualNote>(context, listen: false)
+              .updateTitle(value) == false) return '';
+          return null;
         },
         cursorColor: Colors.white,
         decoration: const InputDecoration(
@@ -31,11 +36,10 @@ class NoteAppBar extends StatelessWidget implements PreferredSizeWidget {
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white, width: 2),
             ),
+            errorStyle: TextStyle(height: 0),
             contentPadding: EdgeInsets.all(3)),
       ),
-      actions: const [
-        AllignementSelector()
-      ],
+      actions: const [AllignementSelector()],
     );
   }
 }

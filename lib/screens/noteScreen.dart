@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:my_notes/widgets/note_app_bar.dart';
 import 'package:my_notes/widgets/note_content.dart';
 
+import 'package:provider/provider.dart';
+import 'package:my_notes/providers/notes.dart';
+import 'package:my_notes/providers/individual_note.dart';
+
 class NoteScreen extends StatefulWidget {
   const NoteScreen({super.key});
 
@@ -12,7 +16,7 @@ class NoteScreen extends StatefulWidget {
   State<NoteScreen> createState() => _NoteScreenState();
 }
 
-class _NoteScreenState extends State<NoteScreen> {
+class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver{
   late String _mode;
   bool _isLoading = false;
   bool _didRun = false;
@@ -20,6 +24,8 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void didChangeDependencies() {
     if (!_didRun) {
+      final titles = Provider.of<Notes>(context, listen: false).titles;
+      Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _mode = arguments["mode"];
 
@@ -36,6 +42,19 @@ class _NoteScreenState extends State<NoteScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    print("disposed");
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return !_isLoading
         ? Scaffold(
@@ -48,4 +67,13 @@ class _NoteScreenState extends State<NoteScreen> {
             ),
           );
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    print(state);
+    if (state == AppLifecycleState.inactive) {
+      
+    }
+  }
+
 }
