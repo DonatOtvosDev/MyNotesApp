@@ -36,19 +36,22 @@ class IndividualNote extends ChangeNotifier {
   }
 
   bool updateTitle(String? title) {
+    bool returnValue = true;
     if (title == null || title == "") {
       _error = "Title cannot be empty";
-      return false;
-    }
-    else if (_titleList.contains(title.trim())) {
+      returnValue = false;
+    } else if (_titleList.contains(title.trim())) {
       _error = "Note already exists with this title";
-      return false;
+      returnValue = false;
     } else if (title.contains(RegExp("[^a-zA-z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ ]"))) {
       _error = "Invalid character is used";
-      return false;
+      returnValue = false;
+    } else {
+      _title = title;
+      _error = null;
     }
-    _title = title;
-    return true;
+    notifyListeners();
+    return returnValue;
   }
 
   void updateContent(String content) {
@@ -66,6 +69,15 @@ class IndividualNote extends ChangeNotifier {
 
   Future<void> saveNote() async {
     if (_id == null) {}
+  }
+
+  void generateInitialValue() {
+    String defaultTitle = "Title";
+    int index = 1;
+    while (_titleList.contains(("$defaultTitle$index").trim())) {
+      index += 1;
+    }
+    _title = "$defaultTitle$index";
   }
 
   void changeTextAlign(String alignement) {

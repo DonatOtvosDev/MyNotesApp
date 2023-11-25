@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:my_notes/widgets/note_app_bar.dart';
 import 'package:my_notes/widgets/note_content.dart';
+import 'package:my_notes/widgets/error_bar.dart';
 
 import 'package:provider/provider.dart';
 import 'package:my_notes/providers/notes.dart';
@@ -16,7 +17,7 @@ class NoteScreen extends StatefulWidget {
   State<NoteScreen> createState() => _NoteScreenState();
 }
 
-class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver{
+class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
   late String _mode;
   bool _isLoading = false;
   bool _didRun = false;
@@ -28,11 +29,13 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver{
       Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _mode = arguments["mode"];
-
-      if (_mode == "edit"){
+      if (_mode == "edit") {
         setState(() {
           _isLoading = true;
         });
+      } else if (_mode == "add") {
+        Provider.of<IndividualNote>(context, listen: false)
+            .generateInitialValue();
       }
       setState(() {
         _didRun = true;
@@ -58,7 +61,12 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver{
   Widget build(BuildContext context) {
     return !_isLoading
         ? Scaffold(
-            appBar: NoteAppBar(AppBar()), body: const NoteContentEditor())
+            appBar: NoteAppBar(AppBar()),
+            body: const NoteContentEditor(),
+            floatingActionButton: const ErrorBar(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          )
         : const Scaffold(
             body: Center(
               child: CircularProgressIndicator(
@@ -71,9 +79,6 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     print(state);
-    if (state == AppLifecycleState.inactive) {
-      
-    }
+    if (state == AppLifecycleState.inactive) {}
   }
-
 }
