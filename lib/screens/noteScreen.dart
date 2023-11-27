@@ -22,16 +22,39 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
   bool _isLoading = false;
   bool _didRun = false;
 
+  Future<void> _saveNote() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final newNote =
+        await Provider.of<IndividualNote>(context, listen: false).saveNote();
+    if(!mounted) return;
+    Provider.of<Notes>(context, listen: false).updateNote(newNote);
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   void didChangeDependencies() {
     if (!_didRun) {
       final titles = Provider.of<Notes>(context, listen: false).titles;
-      Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
+
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _mode = arguments["mode"];
       if (_mode == "edit") {
+        Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
+        int id = arguments["id"];
         setState(() {
           _isLoading = true;
+        });
+        Provider.of<IndividualNote>(context, listen: false)
+            .loadNote(id)
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
         });
       } else if (_mode == "add") {
         Provider.of<IndividualNote>(context, listen: false)
@@ -53,7 +76,6 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    print("disposed");
     super.dispose();
   }
 
@@ -61,7 +83,7 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return !_isLoading
         ? Scaffold(
-            appBar: NoteAppBar(AppBar()),
+            appBar: NoteAppBar(_saveNote,AppBar()),
             body: const NoteContentEditor(),
             floatingActionButton: const ErrorBar(),
             floatingActionButtonLocation:
@@ -78,7 +100,8 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    print(state);
-    if (state == AppLifecycleState.inactive) {}
+    if (state == AppLifecycleState.inactive) {
+      _saveNote();
+    }
   }
 }

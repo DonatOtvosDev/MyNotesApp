@@ -65,6 +65,16 @@ class Notes extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateNote(NoteData newNote) {
+    for (int i = 0; i < _notes.length; i ++) {
+      if (_notes[i].id == newNote.id) {
+        _notes[i] = newNote;
+        notifyListeners();
+        break;
+      }
+    }
+  }
+
   DateTime _pharseTimeToUtc(String timeAsString) {
     final dtToConvert = DateTime.parse(timeAsString);
     //convering the locally phased datetime to utc

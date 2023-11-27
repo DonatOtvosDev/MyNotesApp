@@ -49,6 +49,7 @@ class UserAuth extends ChangeNotifier {
     _expiary = _pharseTimeToUtc(responseData["expiary"]);
     _userName = data["username"];
     notifyListeners();
+    _autoRefreshToken(data);
   }
 
   Future<void> register(Map<String, String> data) async {
@@ -62,7 +63,6 @@ class UserAuth extends ChangeNotifier {
     }
 
     loginUser(data);
-    _autoRefreshToken(data);
   }
 
   void _autoRefreshToken(Map<String, String> data) {

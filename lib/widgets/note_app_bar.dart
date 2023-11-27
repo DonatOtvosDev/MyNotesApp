@@ -6,8 +6,9 @@ import 'package:my_notes/providers/individual_note.dart';
 
 class NoteAppBar extends StatefulWidget implements PreferredSizeWidget {
   final AppBar appBar;
+  final Function saveAndExit;
 
-  const NoteAppBar(this.appBar, {super.key});
+  const NoteAppBar(this.saveAndExit, this.appBar, {super.key});
 
   @override
   Size get preferredSize => appBar.preferredSize;
@@ -25,7 +26,7 @@ class _NoteAppBarState extends State<NoteAppBar> {
     return AppBar(
       leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            widget.saveAndExit();
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white)),
       titleSpacing: 0,

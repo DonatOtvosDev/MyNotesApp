@@ -9,13 +9,17 @@ class NoteContentEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initialValue = Provider.of<IndividualNote>(context,listen: false).content;
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.all(12),
-      child: TextField(
+      child: TextFormField(
+        initialValue: initialValue,
         style: const TextStyle(color: Colors.white, fontSize: 18),
-        onChanged: (value) {},
+        onChanged: (value) {
+          Provider.of<IndividualNote>(context, listen: false).updateContent(value);
+        },
         cursorColor: Colors.white,
         expands: true,
         maxLines: null,
