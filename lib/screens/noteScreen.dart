@@ -29,7 +29,7 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
     final newNote =
         await Provider.of<IndividualNote>(context, listen: false).saveNote();
     if(!mounted) return;
-    Provider.of<Notes>(context, listen: false).updateNote(newNote);
+    Provider.of<Notes>(context, listen: false).updateNotes(newNote);
     setState(() {
       _isLoading = false;
     });
@@ -39,12 +39,11 @@ class _NoteScreenState extends State<NoteScreen> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     if (!_didRun) {
-      final titles = Provider.of<Notes>(context, listen: false).titles;
-
+      final titles = Provider.of<Notes>(context).titles;
       final arguments = ModalRoute.of(context)!.settings.arguments as Map;
       _mode = arguments["mode"];
+      Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
       if (_mode == "edit") {
-        Provider.of<IndividualNote>(context, listen: false).openNewNote(titles);
         int id = arguments["id"];
         setState(() {
           _isLoading = true;

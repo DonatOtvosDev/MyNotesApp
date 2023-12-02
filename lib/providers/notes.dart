@@ -8,7 +8,6 @@ const String rootLink = "http://mynotes.wombat-tech.tk";
 
 class Notes extends ChangeNotifier {
   String? _filter;
-  
 
   List<NoteData> _notes = [];
 
@@ -60,19 +59,40 @@ class Notes extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteNote(int id) async {
+    if (authToken == null) return;
+    final url = Uri.parse("$rootLink/deletenote");
+    final response = await http.delete(url,
+        headers: {
+          "Authorization": "Bearer $authToken",
+          "Content-type": "application/json"
+        },
+        body: json.encode({"id": id}));
+    final responseData = json.decode(response.body);
+
+    if (!(response.statusCode < 400)) {
+      throw responseData["detail"];
+    }
+
+    _notes.removeWhere((note) => note.id == id);
+    notifyListeners();
+  }
+
   void updateFilter(String newFilter) {
     _filter = newFilter;
     notifyListeners();
   }
 
-  void updateNote(NoteData newNote) {
-    for (int i = 0; i < _notes.length; i ++) {
+  void updateNotes(NoteData newNote) {
+    for (int i = 0; i < _notes.length; i++) {
       if (_notes[i].id == newNote.id) {
         _notes[i] = newNote;
         notifyListeners();
-        break;
+        return;
       }
     }
+    _notes.add(newNote);
+    notifyListeners();
   }
 
   DateTime _pharseTimeToUtc(String timeAsString) {

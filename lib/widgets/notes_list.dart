@@ -16,6 +16,19 @@ class _NotesListState extends State<NotesList> {
   bool _didRun = false;
   bool _isLoading = false;
 
+  void deleteNote(int id) async {
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<Notes>(context, listen: false).deleteNote(id).then(
+      (_) {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+    );
+  }
+
   @override
   void didChangeDependencies() {
     if (!_didRun) {
@@ -46,7 +59,8 @@ class _NotesListState extends State<NotesList> {
               child: Consumer<Notes>(
                   builder: (ctx, notes, _) => ListView.builder(
                       itemCount: notes.notes.length,
-                      itemBuilder: (ctx, i) => NoteItem(notes.notes[i]))),
+                      itemBuilder: (ctx, i) =>
+                          NoteItem(deleteNote, notes.notes[i]))),
             ),
     );
   }

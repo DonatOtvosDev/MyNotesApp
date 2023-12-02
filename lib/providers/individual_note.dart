@@ -70,6 +70,8 @@ class IndividualNote extends ChangeNotifier {
   }
 
   Future<NoteData> saveNote() async {
+    if (authToken == null) throw "Unauthorized";
+    _content ??= "";
     Uri? url;
     Map args = {"title": _title, "content": _content};
     if (_id == null) {
