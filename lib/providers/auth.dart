@@ -65,6 +65,14 @@ class UserAuth extends ChangeNotifier {
     loginUser(data);
   }
 
+  void logOut() {
+     _token = null;
+    _expiary = null;
+    _userName = null;
+    _authTimer?.cancel();
+    notifyListeners();
+  }
+
   void _autoRefreshToken(Map<String, String> data) {
     if (_authTimer != null) {
       _authTimer!.cancel();

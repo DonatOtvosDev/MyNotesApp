@@ -6,8 +6,18 @@ import 'package:my_notes/modells/note_modell.dart';
 
 const String rootLink = "http://mynotes.wombat-tech.tk";
 
+enum SortTypes { aToZ, zToA, latestToOldest, oldestToLatest }
+
 class Notes extends ChangeNotifier {
   String? _filter;
+  SortTypes _sortBy = SortTypes.aToZ;
+
+  final List<SortTypes> _sortingOptions = [
+    SortTypes.aToZ,
+    SortTypes.zToA,
+    SortTypes.latestToOldest,
+    SortTypes.oldestToLatest
+  ];
 
   List<NoteData> _notes = [];
 
@@ -21,6 +31,19 @@ class Notes extends ChangeNotifier {
 
   List<String> get titles {
     return _notes.map((note) => note.title).toList();
+  }
+
+  String get sortedBy {
+    switch (_sortBy) {
+      case SortTypes.aToZ:
+        return "AtoZ";
+      case SortTypes.zToA:
+        return "ZtoA";
+      case SortTypes.latestToOldest:
+        return "Latest";
+      case SortTypes.oldestToLatest:
+        return "Oldest";
+    }
   }
 
   List<NoteData> get notes {
@@ -56,6 +79,7 @@ class Notes extends ChangeNotifier {
           content: nt["content"],
           lastModified: _pharseTimeToUtc(nt["last_modified"])));
     }
+    _sortNotes();
     notifyListeners();
   }
 
@@ -87,12 +111,36 @@ class Notes extends ChangeNotifier {
     for (int i = 0; i < _notes.length; i++) {
       if (_notes[i].id == newNote.id) {
         _notes[i] = newNote;
+        _sortNotes();
         notifyListeners();
         return;
       }
     }
     _notes.add(newNote);
+    _sortNotes();
     notifyListeners();
+  }
+
+  void changeSort() {
+    if (_sortingOptions.indexOf(_sortBy) < (_sortingOptions.length - 1)) {
+      _sortBy = _sortingOptions[_sortingOptions.indexOf(_sortBy) + 1];
+    } else {
+      _sortBy = _sortingOptions.first;
+    }
+    _sortNotes();
+    notifyListeners();
+  }
+
+  void _sortNotes() {
+    if (_sortBy == SortTypes.aToZ) {
+      _notes.sort((a, b) => a.title.compareTo(b.title));
+    } else if (_sortBy == SortTypes.zToA) {
+      _notes.sort((a, b) => b.title.compareTo(a.title));
+    } else if (_sortBy == SortTypes.oldestToLatest) {
+      _notes.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+    } else if (_sortBy == SortTypes.latestToOldest) {
+      _notes.sort((a, b) => b.lastModified.compareTo(a.lastModified));
+    }
   }
 
   DateTime _pharseTimeToUtc(String timeAsString) {
