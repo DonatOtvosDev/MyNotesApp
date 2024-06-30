@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:my_notes/modells/note_modell.dart';
 
-const String rootLink = "http://mynotes.wombat-tech.tk";
+const String rootLink = "http://donatdev.tech:9000";
 
 class IndividualNote extends ChangeNotifier {
   int? _id;

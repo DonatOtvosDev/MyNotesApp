@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-const String rootLink = "http://mynotes.wombat-tech.tk";
+const String rootLink = "http://donatdev.tech:9000";
 
 class UserAuth extends ChangeNotifier {
   String? _userName;
